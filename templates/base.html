@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Assessment Risiko Attrition - PT CoreTech{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='30' r='15' fill='%23ffb81c'/><path d='M40,50 Q40,60 50,60 Q60,60 60,50' fill='%23ffb81c'/><rect x='35' y='65' width='30' height='8' fill='%23ffb81c'/></svg>">
+    <style>
+        /* Additional component styles */
+        ul, ol {
+            font-family: 'Segoe UI', -apple-system, sans-serif;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-users" style="margin-right: 0.5rem; color: #ffb81c;"></i>PT CoreTech Business Solutions
+                    <span>Attrition Analytics Tech Tech CoreTech</span>
+                </div>
+                <ul class="nav-links">
+                    <li>
+                        <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Beranda</a>
+                    </li>
+                    <li>
+                        <a href="/prediction" {% if request.path == '/prediction' %}class="active"{% endif %}>Assessment</a>
+                    </li>
+                    <li>
+                        <a href="/dashboard" {% if request.path == '/dashboard' %}class="active"{% endif %}>Dashboard</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 PT CoreTech Business Solutions</p>
+            <p class="footer-subtitle">Platform Analitik Risiko Attrition Prediktif</p>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

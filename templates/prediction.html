@@ -1,0 +1,542 @@
+{% extends "base.html" %}
+
+{% block title %}Assessment Risiko Attrition Karyawan - PT CoreTech{% endblock %}
+
+{% block content %}
+<section>
+
+    <!-- HERO -->
+    <div class="hero"><br>
+        <h1>Assessment Risiko Attrition Karyawan</h1>
+        <p>Identifikasi karyawan berisiko dan dapatkan rekomendasi tindakan HR</p>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-section">
+        <form id="predictionForm" class="form-container">
+
+            <!-- CORE DATA -->
+            <fieldset>
+                <legend>Core Information</legend>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" min="18" max="80" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <select id="department" name="department" required>
+                            <option value="">Pilih</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Research & Development">Research & Development</option>
+                            <option value="Human Resources">HR</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="jobRole">Job Role</label>
+                        <select id="jobRole" name="job_role" required>
+                            <option value="">Pilih</option>
+                            <option value="Sales Executive">Sales Executive</option>
+                            <option value="Research Scientist">Research Scientist</option>
+                            <option value="Laboratory Technician">Lab Technician</option>
+                            <option value="Manufacturing Director">Manufacturing Director</option>
+                            <option value="Healthcare Representative">Healthcare Rep</option>
+                            <option value="Sales Representative">Sales Rep</option>
+                            <option value="Manager">Manager</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="jobLevel">Job Level</label>
+                        <select id="jobLevel" name="job_level" required>
+                            <option value="">Pilih</option>
+                            <option value="1">1 - Entry</option>
+                            <option value="2">2 - Menengah</option>
+                            <option value="3">3 - Senior</option>
+                            <option value="4">4 - Manager</option>
+                            <option value="5">5 - Eksekutif</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="monthlyIncome">Monthly Income ($)</label>
+                        <input type="number" id="monthlyIncome" name="monthly_income" min="1000" max="20000" step="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="overtime">Overtime Status</label>
+                        <select id="overtime" name="overtime" required>
+                            <option value="">Pilih</option>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="jobSatisfaction">Job Satisfaction</label>
+                    <div class="range-wrapper">
+                        <div class="range-fill" id="jobSatFill"></div>
+                        <input type="range" id="jobSatisfaction" name="job_satisfaction" min="1" max="4" value="2" required>
+                        <div class="range-labels">
+                            <span class="range-label-click" data-value="1">1</span>
+                            <span class="range-label-click" data-value="2">2</span>
+                            <span class="range-label-click" data-value="3">3</span>
+                            <span class="range-label-click" data-value="4">4</span>
+                        </div>
+                    </div>
+                    <br><div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.75rem; font-family: Georgia, serif;">
+                        <span id="jobSatValue">Fair</span> · 1 = Low, 4 = High
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="workLifeBalance">Work-Life Balance</label>
+                    <div class="range-wrapper">
+                        <div class="range-fill" id="wlbFill"></div>
+                        <input type="range" id="workLifeBalance" name="work_life_balance" min="1" max="4" value="2" required>
+                        <div class="range-labels">
+                            <span class="range-label-click" data-value="1">1</span>
+                            <span class="range-label-click" data-value="2">2</span>
+                            <span class="range-label-click" data-value="3">3</span>
+                            <span class="range-label-click" data-value="4">4</span>
+                        </div>
+                    </div>
+                    <br><div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.75rem; font-family: Georgia, serif;">
+                        <span id="wlbValue">Fair</span> · 1 = Low, 4 = High
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="yearsAtCompany">Years at Company</label>
+                        <input type="number" id="yearsAtCompany" name="years_at_company" min="0" max="40" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="yearsInRole">Years in Current Role</label>
+                        <input type="number" id="yearsInRole" name="years_in_role" min="0" max="40" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- ADVANCED -->
+            <button type="button" id="advancedToggle">+ Advanced Details (Optional)</button>
+
+            <fieldset id="advancedSection" style="display: none;">
+                <legend>Advanced</legend>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="yearsSincePromotion">Years Since Last Promotion</label>
+                        <input type="number" id="yearsSincePromotion" name="years_since_promotion" min="0" max="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="envSatisfaction">Environment Satisfaction</label>
+                        <select id="envSatisfaction" name="env_satisfaction">
+                            <option value="">Pilih</option>
+                            <option value="1">1 - Low</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="3">3 - Good</option>
+                            <option value="4">4 - High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="relationshipSatisfaction">Relationship Satisfaction</label>
+                        <select id="relationshipSatisfaction" name="relationship_satisfaction">
+                            <option value="">Pilih</option>
+                            <option value="1">1 - Low</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="3">3 - Good</option>
+                            <option value="4">4 - High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="yearsWithManager">Years with Current Manager</label>
+                        <input type="number" id="yearsWithManager" name="years_with_manager" min="0" max="40">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="percentSalaryHike">Last Salary Hike (%)</label>
+                        <input type="number" id="percentSalaryHike" name="percent_salary_hike" min="0" max="25">
+                    </div>
+                    <div class="form-group">
+                        <label for="stockOptionLevel">Stock Option Level</label>
+                        <select id="stockOptionLevel" name="stock_option_level">
+                            <option value="">Pilih</option>
+                            <option value="0">0 - None</option>
+                            <option value="1">1 - Low</option>
+                            <option value="2">2 - Medium</option>
+                            <option value="3">3 - High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="trainingTimes">Training Count (Last Year)</label>
+                        <input type="number" id="trainingTimes" name="training_times" min="0" max="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalWorkingYears">Total Working Years</label>
+                        <input type="number" id="totalWorkingYears" name="total_working_years" min="0" max="50">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="education">Education Level</label>
+                        <select id="education" name="education">
+                            <option value="">Pilih</option>
+                            <option value="1">High School</option>
+                            <option value="2">Bachelor</option>
+                            <option value="3">Master</option>
+                            <option value="4">PhD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="educationField">Education Field</label>
+                        <select id="educationField" name="education_field">
+                            <option value="">Pilih</option>
+                            <option value="Life Sciences">Life Sciences</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Tech Degree">Tech</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="numCompaniesWorked">Previous Companies</label>
+                        <input type="number" id="numCompaniesWorked" name="num_companies_worked" min="0" max="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="businessTravel">Business Travel</label>
+                        <select id="businessTravel" name="business_travel">
+                            <option value="">Pilih</option>
+                            <option value="Travel_Rarely">Rarely</option>
+                            <option value="Travel_Frequently">Frequently</option>
+                            <option value="Non-Travel">None</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="distanceFromHome">Distance from Home (km)</label>
+                        <input type="number" id="distanceFromHome" name="distance_from_home" min="1" max="30">
+                    </div>
+                    <div class="form-group">
+                        <label for="jobInvolvement">Job Involvement</label>
+                        <select id="jobInvolvement" name="job_involvement">
+                            <option value="">Pilih</option>
+                            <option value="1">1 - Low</option>
+                            <option value="2">2 - Medium</option>
+                            <option value="3">3 - High</option>
+                            <option value="4">4 - Very High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="performanceRating">Performance Rating</label>
+                    <select id="performanceRating" name="performance_rating">
+                        <option value="">Pilih</option>
+                        <option value="3">3 - Good</option>
+                        <option value="4">4 - Excellent</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary btn-submit" style="font-family: Georgia, serif;">
+                <span id="buttonText">Generate Assessment</span>
+                <span id="buttonLoader" style="display: none;" class="loading"></span>
+            </button>
+        </form>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="predictionResults" style="display: none;">
+        <div id="riskLevelContainer"></div>
+        <div id="errorContainer" style="display: none;" class="error"></div>
+        <div id="driversContainer" class="results-block"></div>
+        <div id="recommendationsContainer" class="results-block"></div>
+    </div>
+
+    <!-- METHODOLOGY -->
+    <div class="methodology">
+        <h3 style="font-family: Georgia, serif;">Bagaimana Sistem Bekerja</h3>
+        <div class="method-grid">
+            <div class="method-item">
+                <h4 style="font-family: Georgia, serif;"><i class="fas fa-circle" style="color: #ffb81c; margin-right: 0.75rem; font-size: 0.8rem;"></i>Model Machine Learning</h4>
+                <p style="font-family: Georgia, serif;">Algoritma prediktif dilatih pada data historis 1.470 karyawan dengan akurasi 85%. Menganalisis pola kepuasan kerja, lingkungan, dan dynamic karyawan untuk memprediksi risiko attrition.</p>
+            </div>
+            <div class="method-item">
+                <h4 style="font-family: Georgia, serif;"><i class="fas fa-circle" style="color: #ffb81c; margin-right: 0.75rem; font-size: 0.8rem;"></i>Identifikasi Driver Risiko</h4>
+                <p style="font-family: Georgia, serif;">Expert system berbasis aturan HR menganalisis faktor penyebab utama (kepuasan kerja rendah, overtime berlebih, gaji tidak kompetitif, promosi terlambat). Memberikan insights spesifik dan actionable untuk HR.</p>
+            </div>
+            <div class="method-item">
+                <h4 style="font-family: Georgia, serif;"><i class="fas fa-circle" style="color: #4caf50; margin-right: 0.75rem; font-size: 0.8rem;"></i>Rekomendasi Aksi Prioritas</h4>
+                <p style="font-family: Georgia, serif;">Platform merekomendasikan tindakan HR spesifik berdasarkan driver risiko yang teridentifikasi (career development, peningkatan kompensasi, workload rebalancing). Disesuaikan dengan profile dan kondisi karyawan.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const labels = { '1': 'Low', '2': 'Fair', '3': 'Good', '4': 'High' };
+
+document.getElementById('advancedToggle').addEventListener('click', function(e) {
+    e.preventDefault();
+    const section = document.getElementById('advancedSection');
+    const btn = this;
+    if (section.style.display === 'none') {
+        section.style.display = 'block';
+        btn.textContent = '− Advanced Details';
+    } else {
+        section.style.display = 'none';
+        btn.textContent = '+ Advanced Details (Optional)';
+    }
+});
+
+// Update range slider appearance dan label
+function updateRangeSlider(slider) {
+    const value = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+    
+    // Cari range-fill yang sama wrapppernya
+    const fillElement = slider.previousElementSibling;
+    if (fillElement && fillElement.classList.contains('range-fill')) {
+        fillElement.style.width = value + '%';
+    }
+    
+    // Update label active states
+    updateLabelsActiveState(slider);
+}
+
+function updateLabelsActiveState(slider) {
+    const wrapper = slider.closest('.range-wrapper');
+    if (!wrapper) return;
+    
+    const labels = wrapper.querySelectorAll('.range-label-click');
+    labels.forEach(label => {
+        const labelValue = label.getAttribute('data-value');
+        if (labelValue == slider.value) {
+            label.classList.add('active');
+        } else {
+            label.classList.remove('active');
+        }
+    });
+}
+
+const jobSatSlider = document.getElementById('jobSatisfaction');
+const wlbSlider = document.getElementById('workLifeBalance');
+
+// Initialize sliders
+updateRangeSlider(jobSatSlider);
+updateRangeSlider(wlbSlider);
+
+jobSatSlider.addEventListener('input', function() {
+    updateRangeSlider(this);
+    document.getElementById('jobSatValue').textContent = labels[this.value];
+});
+
+wlbSlider.addEventListener('input', function() {
+    updateRangeSlider(this);
+    document.getElementById('wlbValue').textContent = labels[this.value];
+});
+
+// Handle click pada range labels
+document.querySelectorAll('.range-label-click').forEach(label => {
+    label.addEventListener('click', function(e) {
+        e.preventDefault();
+        const value = this.getAttribute('data-value');
+        const wrapper = this.closest('.range-wrapper');
+        const slider = wrapper.querySelector('input[type="range"]');
+        
+        // Set slider value
+        slider.value = value;
+        
+        // Trigger input event untuk update display
+        const event = new Event('input', { bubbles: true });
+        slider.dispatchEvent(event);
+    });
+});
+
+document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const btn = document.querySelector('.btn-submit');
+    const text = document.getElementById('buttonText');
+    const loader = document.getElementById('buttonLoader');
+
+    // Validate required fields FIRST
+    const requiredFields = ['age', 'department', 'jobLevel', 'jobRole', 'monthlyIncome', 'overtime', 'jobSatisfaction', 'workLifeBalance', 'yearsAtCompany', 'yearsInRole'];
+    const formValues = {};
+    let hasError = false;
+    
+    for (let field of requiredFields) {
+        const element = document.getElementById(field);
+        if (!element || !element.value || element.value === '') {
+            console.error(`[VALIDATION] Missing required field: ${field}`);
+            hasError = true;
+        } else {
+            formValues[field] = element.value;
+            console.log(`[DEBUG] ${field} = ${element.value}`);
+        }
+    }
+    
+    if (hasError) {
+        alert('ERROR: Please fill all required fields marked with *');
+        return;
+    }
+
+    btn.disabled = true;
+    text.style.display = 'none';
+    loader.style.display = 'inline-block';
+
+    const data = {
+        age: document.getElementById('age').value,
+        business_travel: document.getElementById('businessTravel').value || 'Travel_Rarely',
+        department: document.getElementById('department').value,
+        distance_from_home: document.getElementById('distanceFromHome').value || '10',
+        education: document.getElementById('education').value || '3',
+        education_field: document.getElementById('educationField').value || 'Life Sciences',
+        env_satisfaction: document.getElementById('envSatisfaction').value || '3',
+        gender: 'Male',
+        job_involvement: document.getElementById('jobInvolvement').value || '3',
+        job_level: document.getElementById('jobLevel').value,
+        job_role: document.getElementById('jobRole').value,
+        job_satisfaction: document.getElementById('jobSatisfaction').value,
+        marital_status: 'Married',
+        monthly_income: document.getElementById('monthlyIncome').value,
+        num_companies_worked: document.getElementById('numCompaniesWorked').value || '2',
+        overtime: document.getElementById('overtime').value,
+        percent_salary_hike: document.getElementById('percentSalaryHike').value || '12',
+        performance_rating: document.getElementById('performanceRating').value || '3',
+        relationship_satisfaction: document.getElementById('relationshipSatisfaction').value || '3',
+        stock_option_level: document.getElementById('stockOptionLevel').value || '1',
+        total_working_years: document.getElementById('totalWorkingYears').value || '10',
+        training_times: document.getElementById('trainingTimes').value || '3',
+        work_life_balance: document.getElementById('workLifeBalance').value,
+        years_at_company: document.getElementById('yearsAtCompany').value,
+        years_in_role: document.getElementById('yearsInRole').value,
+        years_with_manager: document.getElementById('yearsWithManager').value || '2',
+        years_since_promotion: document.getElementById('yearsSincePromotion').value || '2'
+    };
+    
+    console.log('[DEBUG] Data to send:', data);
+
+    try {
+        const response = await fetch('/api/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        console.log('[DEBUG] Response status:', response.status);
+        const result = await response.json();
+        console.log('[DEBUG] Response result:', result);
+
+        if (!response.ok) {
+            console.error('[ERROR] Server returned error:', result);
+            showError(`Error: ${result.error || 'Server error ' + response.status}`);
+            return;
+        }
+
+        if (result.success) {
+            document.getElementById('errorContainer').style.display = 'none';
+
+            const prob = result.ml_probability_value;
+            let riskText, riskColor;
+
+            if (prob <= 0.3) {
+                riskText = 'RISIKO RENDAH';
+                riskColor = 'var(--accent-green)';
+            } else if (prob <= 0.6) {
+                riskText = 'RISIKO SEDANG';
+                riskColor = 'var(--accent-amber)';
+            } else {
+                riskText = 'RISIKO TINGGI';
+                riskColor = 'var(--accent-red)';
+            }
+
+            const riskHTML = `
+                <div class="risk-label">Hasil Assessment</div>
+                <div class="risk-text" style="color: ${riskColor};">${riskText}</div>
+                <div class="risk-probability">${result.ml_probability} probabilitas attrition</div>
+            `;
+            document.getElementById('riskLevelContainer').innerHTML = riskHTML;
+
+            if (result.top_drivers && result.top_drivers.length > 0) {
+                let driversHTML = '<h3>Driver Risiko Utama</h3>';
+                result.top_drivers.forEach((driver, idx) => {
+                    driversHTML += `
+                        <div class="driver-item">
+                            <div class="driver-number" style="background: ${riskColor};">${idx + 1}</div>
+                            <div class="driver-title">${driver.label}</div>
+                            <div class="driver-reason">${driver.reason}</div>
+                            <div class="driver-actions">
+                                <strong>Rekomendasi Aksi</strong>
+                                <ul>
+                                    ${driver.actions.slice(0, 3).map(a => `<li>${a}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('driversContainer').innerHTML = driversHTML;
+            }
+
+            if (result.recommendations) {
+                let recHTML = '<h3>Rekomendasi Tindakan HR</h3>';
+                recHTML += `<p class="rec-general">${result.recommendations.general}</p>`;
+                recHTML += `<div class="rec-priority" style="background: ${riskColor};">Prioritas: ${result.recommendations.priority}</div>`;
+
+                if (result.recommendations.specific_actions && result.recommendations.specific_actions.length > 0) {
+                    recHTML += '<div class="rec-actions"><strong>Item Aksi</strong><ol>';
+                    result.recommendations.specific_actions.forEach(action => {
+                        recHTML += `<li>${action}</li>`;
+                    });
+                    recHTML += '</ol></div>';
+                }
+
+                document.getElementById('recommendationsContainer').innerHTML = recHTML;
+            }
+
+            document.getElementById('predictionResults').style.display = 'block';
+            document.getElementById('riskLevelContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            showError(result.error || 'Assessment gagal.');
+        }
+    } catch (error) {
+        console.error('[ERROR] Exception:', error);
+        showError('Network error: ' + error.message);
+    } finally {
+        btn.disabled = false;
+        text.style.display = 'inline';
+        loader.style.display = 'none';
+    }
+});
+
+function showError(msg) {
+    console.error('[SHOW ERROR]', msg);
+    const err = document.getElementById('errorContainer');
+    err.textContent = msg;
+    err.style.display = 'block';
+    err.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+{% endblock %}
