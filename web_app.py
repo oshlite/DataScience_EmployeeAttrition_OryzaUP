@@ -5,6 +5,14 @@ import joblib
 import warnings
 import os
 import sys
+import io
+import requests
+from datetime import datetime
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import inch
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Image
+from reportlab.lib.enums import TA_CENTER
 
 warnings.filterwarnings('ignore')
 
@@ -83,6 +91,16 @@ print("[DEBUG] Loading data...")
 df = load_data()
 
 # ====== ROUTES ======
+
+@app.route('/favicon.ico')
+def favicon():
+    """Return a simple favicon to avoid 404 errors"""
+    return send_file(
+        io.BytesIO(
+            b'\x00\x00\x01\x00\x01\x00\x10\x10\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+        ),
+        mimetype='image/x-icon'
+    )
 
 @app.route('/')
 def home():
@@ -326,6 +344,7 @@ def get_dashboard_data():
 def download_dashboards_pdf():
     """Download all 6 Tableau dashboards as PDF"""
     try:
+        print("[DEBUG] Starting PDF generation...")
         # Dashboard URLs
         dashboard_urls = [
             "https://public.tableau.com/app/profile/oryza.surya.hapsari/viz/dashboardya/DashboardHRTechTechCoreTech",
@@ -349,7 +368,7 @@ def download_dashboards_pdf():
             fontSize=24,
             textColor='#000000',
             spaceAfter=20,
-            alignment=1
+            alignment=TA_CENTER
         )
         
         title = Paragraph("Dashboard Attrition - HR Analytics", title_style)
@@ -361,7 +380,7 @@ def download_dashboards_pdf():
             fontSize=10,
             textColor='#666666',
             spaceAfter=20,
-            alignment=1
+            alignment=TA_CENTER
         )
         date_text = Paragraph(f"{datetime.now().strftime('%B %d, %Y')}", date_style)
         elements.append(date_text)
@@ -377,7 +396,14 @@ def download_dashboards_pdf():
             "https://public.tableau.com/static/images/da/dashboardya/end/1.png"
         ]
         
-        dashboard_names = ["", "", "", "", "", ""]
+        dashboard_names = [
+            "Dashboard HR Tech Tech CoreTech",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
         
         for idx, (url, img_url, name) in enumerate(zip(dashboard_urls, image_urls, dashboard_names)):
             try:
@@ -400,9 +426,11 @@ def download_dashboards_pdf():
                 else:
                     # Fallback text
                     elements.append(Paragraph(f"Dashboard: <a href='{url}' color='#ffb81c'>{name}</a>", styles['Normal']))
+                    print(f"[WARN] Failed to load image for {name}: HTTP {response.status_code}")
                     
             except Exception as e:
                 # Fallback to link
+                print(f"[WARN] Error loading dashboard {name}: {str(e)}")
                 elements.append(Paragraph(f"Dashboard: <a href='{url}' color='#ffb81c'>{name}</a>", styles['Normal']))
             
             # Add page break between dashboards
@@ -410,9 +438,11 @@ def download_dashboards_pdf():
                 elements.append(PageBreak())
         
         # Build PDF
+        print("[DEBUG] Building PDF document...")
         doc.build(elements)
         pdf_buffer.seek(0)
         
+        print("[OK] PDF generated successfully")
         return send_file(
             pdf_buffer,
             mimetype='application/pdf',
@@ -421,8 +451,10 @@ def download_dashboards_pdf():
         )
         
     except Exception as e:
-        print(f"PDF generation error: {e}")
-        return jsonify({'error': str(e)}), 500
+        print(f"[ERROR] PDF generation error: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': f'PDF generation failed: {str(e)}'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
