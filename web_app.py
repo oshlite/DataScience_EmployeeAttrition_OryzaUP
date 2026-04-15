@@ -3,44 +3,55 @@ import pandas as pd
 import numpy as np
 import joblib
 import warnings
-from expert_system import AttritionExpertSystem
-from dashboard_service import DashboardService
-from reportlab.lib.pagesizes import letter, A4
-from reportlab.platypus import SimpleDocTemplate, Image, PageBreak, Spacer, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-import io
-import requests
-from PIL import Image as PILImage
-from datetime import datetime
+import os
+import sys
+
 warnings.filterwarnings('ignore')
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
+
+print("[INFO] Flask app initialized")
 
 # ====== LOAD MODEL & ARTIFACTS ======
 def load_model_and_artifacts():
     """Load trained model and preprocessing artifacts"""
     try:
+        print("[DEBUG] Loading model from model/logistic_regression_best.pkl...")
         model = joblib.load('model/logistic_regression_best.pkl')
-    except:
+        print("[OK] Model loaded")
+    except Exception as e:
+        print(f"[ERROR] Model loading failed: {e}")
         return None, None, None
 
     try:
+        print("[DEBUG] Loading scaler and encoders...")
         scaler = joblib.load('model/scaler.pkl')
         label_encoders = joblib.load('model/label_encoders.pkl')
-    except:
+        print("[OK] Scaler and encoders loaded")
+    except Exception as e:
+        print(f"[ERROR] Scaler/encoders loading failed: {e}")
         scaler = None
         label_encoders = None
 
     return model, scaler, label_encoders
 
+print("[DEBUG] Starting model initialization...")
 model, scaler, label_encoders = load_model_and_artifacts()
 
 # ====== INITIALIZE EXPERT SYSTEM ======
-expert_system = AttritionExpertSystem()
+print("[DEBUG] Loading expert system...")
+try:
+    from expert_system import AttritionExpertSystem
+    expert_system = AttritionExpertSystem()
+    print("[OK] Expert system initialized")
+except Exception as e:
+    print(f"[ERROR] Expert system failed: {e}")
+    expert_system = None
 
 # ====== INITIALIZE DASHBOARD SERVICE ======
+print("[DEBUG] Loading dashboard service...")
 try:
+    from dashboard_service import DashboardService
     dashboard_service = DashboardService('attrition_final.csv')
     print("[OK] Dashboard service initialized")
 except Exception as e:
@@ -51,14 +62,24 @@ except Exception as e:
 def load_data():
     """Load employee data and predictions"""
     try:
+        print("[DEBUG] Loading data...")
         df = pd.read_csv('attrition_final.csv')
-        predictions = pd.read_csv('attrition_predictions_output.csv')
-        df = df.merge(predictions[['EmployeeId', 'Attrition_Probability', 'Prediction_Confidence', 'Predicted_Attrition']],
-                      on='EmployeeId', how='left')
+        print(f"[OK] Loaded {len(df)} employees")
+        
+        try:
+            predictions = pd.read_csv('attrition_predictions_output.csv')
+            df = df.merge(predictions[['EmployeeId', 'Attrition_Probability', 'Prediction_Confidence', 'Predicted_Attrition']],
+                          on='EmployeeId', how='left')
+            print("[OK] Merged predictions")
+        except:
+            print("[WARN] Predictions file not found or merge failed")
+        
         return df
-    except:
+    except Exception as e:
+        print(f"[ERROR] Data loading failed: {e}")
         return None
 
+print("[DEBUG] Loading data...")
 df = load_data()
 
 # ====== ROUTES ======
@@ -66,27 +87,51 @@ df = load_data()
 @app.route('/')
 def home():
     """Home page"""
-    if df is not None:
-        total_employees = len(df)
-        attrition_count = int(df['Attrition'].sum())
-        attrition_rate = (attrition_count / total_employees * 100) if total_employees > 0 else 0
-    else:
-        total_employees = 0
-        attrition_count = 0
-        attrition_rate = 0
+    try:
+        if df is not None:
+            total_employees = len(df)
+            attrition_count = int(df['Attrition'].sum())
+            attrition_rate = (attrition_count / total_employees * 100) if total_employees > 0 else 0
+        else:
+            total_employees = 0
+            attrition_count = 0
+            attrition_rate = 0
 
-    stats = {
-        'total_employees': total_employees,
-        'attrition_count': attrition_count,
-        'attrition_rate': f"{attrition_rate:.1f}",
-    }
+        stats = {
+            'total_employees': total_employees,
+            'attrition_count': attrition_count,
+            'attrition_rate': f"{attrition_rate:.1f}",
+        }
 
-    return render_template('index.html', stats=stats)
+        return render_template('index.html', stats=stats)
+    except Exception as e:
+        print(f"[ERROR] Home route failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return f"Error rendering home: {str(e)}", 500
+
+@app.route('/test')
+def test():
+    """Simple test route"""
+    return jsonify({
+        'status': 'OK',
+        'model_loaded': model is not None,
+        'scaler_loaded': scaler is not None,
+        'expert_system_loaded': expert_system is not None,
+        'dashboard_service_loaded': dashboard_service is not None,
+        'data_loaded': df is not None
+    })
 
 @app.route('/prediction')
 def prediction():
     """Prediction page"""
-    return render_template('prediction.html')
+    try:
+        return render_template('prediction.html')
+    except Exception as e:
+        print(f"[ERROR] Prediction route failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return f"Error rendering prediction: {str(e)}", 500
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
