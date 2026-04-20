@@ -456,5 +456,3 @@ def download_dashboards_pdf():
         traceback.print_exc()
         return jsonify({'error': f'PDF generation failed: {str(e)}'}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
