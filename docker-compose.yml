@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  attrition-app:
+    build: .
+    container_name: employee-attrition-app
+    ports:
+      - "5000:5000"
+      - "8501:8501"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./mlruns:/app/mlruns
+      - ./model:/app/model
+    restart: unless-stopped
