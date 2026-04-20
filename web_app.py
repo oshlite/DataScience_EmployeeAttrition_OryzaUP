@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_file, redirect
+from flask import Flask, render_template, request, jsonify, send_file
 import pandas as pd
 import numpy as np
 import joblib
