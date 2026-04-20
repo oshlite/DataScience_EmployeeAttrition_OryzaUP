@@ -30,4 +30,5 @@ ENV FLASK_APP=web_app.py
 ENV PYTHONUNBUFFERED=1
 
 # Default command runs Flask app
-CMD ["python", "web_app.py"]
+# CMD ["python", "web_app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:${PORT:-5000}", "--workers", "4", "web_app:app"]
