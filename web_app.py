@@ -317,8 +317,8 @@ def predict():
 
 @app.route('/dashboard')
 def dashboard():
-    """Dashboard - Redirect to high-performance GitHub Pages version"""
-    return redirect('https://oshlite.github.io/DS_DashboardCoreTech/')
+    """Dashboard - Embed high-performance GitHub Pages version"""
+    return render_template('dashboard.html')
 
 @app.route('/api/dashboard')
 def get_dashboard_data():

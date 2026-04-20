@@ -4,15 +4,16 @@
 
 {% block content %}
 <section>
+    <!-- EMBEDDED GITHUB PAGES DASHBOARD -->
+    <iframe 
+        src="https://oshlite.github.io/DS_DashboardCoreTech/" 
+        style="width: 100%; height: 100vh; border: none; margin: 0; padding: 0;" 
+        title="Dashboard Analytics CoreTech"
+        loading="lazy">
+    </iframe>
+</section>
 
-    <!-- HERO -->
-    <!-- <div class="hero" style="margin-bottom: 4rem;">
-        <br><h1>Dashboard Attrition</h1>
-        <p>Analitik komprehensif dan wawasan mendalam tentang pola attrition karyawan</p>
-    </div> -->
-
-    <!-- TABLEAU EMBEDDED DASHBOARD -->
-    <br><div style="width: 1000px; margin: 0 auto; margin-bottom: 5rem;">
+{% endblock %}
         <div class='tableauPlaceholder' id='viz1776203911798' style='position: relative' loading='lazy'><noscript><a href='#'><img alt='Dashboard HR Tech Tech CoreTech ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;da&#47;dashboardya&#47;DashboardHRTechTechCoreTech&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='dashboardya&#47;DashboardHRTechTechCoreTech' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;da&#47;dashboardya&#47;DashboardHRTechTechCoreTech&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>
         <script type='text/javascript'>function loadTableau1(){if(document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init1); } else { init1(); }function init1(){var divElement = document.getElementById('viz1776203911798');var vizElement = divElement.getElementsByTagName('object')[0];if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1000px';vizElement.style.height='927px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1000px';vizElement.style.height='927px';} else { vizElement.style.width='100%';vizElement.style.height='1727px';}var scriptElement = document.createElement('script');scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';vizElement.parentNode.insertBefore(scriptElement, vizElement);}} const observer1 = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { loadTableau1(); observer1.unobserve(entry.target); } }) }); observer1.observe(document.getElementById('viz1776203911798'));</script>
 
