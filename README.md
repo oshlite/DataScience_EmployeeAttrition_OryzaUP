@@ -10,7 +10,7 @@
 - ✅ **10 Field Penting** - Assessment form yang kompleks namun fokus pada driver utama attrition
 - ✅ **Expert System** - Identifikasi faktor risiko spesifik (kepuasan kerja, overtime, gaji, promosi)
 - ✅ **Rekomendasi Aksi HR** - Actionable insights berdasarkan profile karyawan
-- ✅ **Dashboard Interaktif** - 6 Tableau dashboards dengan visualisasi attrition pattern
+- ✅ **Dashboard Interaktif** - Tableau dashboards dengan visualisasi attrition pattern
 - ✅ **Bilingual** - Bahasa Indonesia + English
 
 ---

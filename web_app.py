@@ -342,7 +342,7 @@ def get_dashboard_data():
 
 @app.route('/api/download-dashboards-pdf')
 def download_dashboards_pdf():
-    """Download all 6 Tableau dashboards as PDF"""
+    """Download all Tableau dashboards as PDF"""
     try:
         print("[DEBUG] Starting PDF generation...")
         # Dashboard URLs
