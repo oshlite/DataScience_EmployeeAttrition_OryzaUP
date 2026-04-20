@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, redirect
 import pandas as pd
 import numpy as np
 import joblib
@@ -317,8 +317,8 @@ def predict():
 
 @app.route('/dashboard')
 def dashboard():
-    """Dashboard page (placeholder)"""
-    return render_template('dashboard.html')
+    """Dashboard - Redirect to high-performance GitHub Pages version"""
+    return redirect('https://oshlite.github.io/DS_DashboardCoreTech/')
 
 @app.route('/api/dashboard')
 def get_dashboard_data():
